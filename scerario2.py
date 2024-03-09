@@ -1,10 +1,15 @@
 from kivy.app import App
-from kivy.uix.button import Button
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.anchorlayout import AnchorLayout
 from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
+
+import json
+from fhir.resources.patient import Patient
+from fhir.resources.humanname import HumanName
+from fhir.resources.observation import Observation
+from fhir.resources.codeableconcept import CodeableConcept
+from fhir.resources.coding import Coding
+# from fhir.resources.fhirdate import FHIRDate
 
 Builder.load_string('''
 <HomeScreen>:
@@ -53,13 +58,14 @@ Builder.load_string('''
             on_press: 
                 root.manager.transition.direction = 'left'
                 root.manager.current = 'symptoms_list'
+                root.on_enter()
         Button:
-            text: 'Biometric Data'
+            text: 'Vital Signs'
             size_hint: (None, None)
             size: (self.parent.width, 100)
             on_press: 
                 root.manager.transition.direction = 'left'
-                root.manager.current = 'biometric_data'
+                root.manager.current = 'vital_signs'
 
 <EnterSymptoms>:
     FloatLayout:
@@ -115,12 +121,22 @@ Builder.load_string('''
                 root.manager.current = 'home'
 
 <SymptomsList>:
+    on_enter:
+        root.on_enter()
     FloatLayout:
+        Label:
+            id: symptoms_list_label
+            text: ''
+            color: (1, 1, 1, 1)
+            size: (500, 100)
+            font_size: 20
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         Button:
             text: 'Back'
             size_hint: (0.25, 0.1)
             pos_hint: {'right': 1, 'bottom': 1}
             on_press:
+                root.on_leave()
                 root.manager.transition.direction = 'right'
                 root.manager.current = 'home'
 
@@ -145,9 +161,22 @@ class EnterSymptoms(Screen):
         print(f'Date: {date}, Symptoms: {symptoms}')
         self.ids.date.text = ''
         self.ids.symptoms.text = ''
+        with open('patient.txt', 'a') as file:
+            file.write(f'Date: {date}\nSymptoms: {symptoms}\n\n')
 
 class SymptomsList(Screen):
-    pass
+    def on_enter(self):
+        with open('patient.txt', 'r') as file:
+            data = file.readlines()
+            filtered_data = []
+            for line in data:
+                if line.startswith('Date:') or line.startswith('Symptoms:'):
+                    filtered_data.append(line.split(':')[1].strip())
+            text = '\n'.join(filtered_data)
+        self.ids.symptoms_list_label.text = str(text)
+
+    def on_leave(self):
+        self.ids.symptoms_list_label.text = ''
 
 class VitalSigns(Screen):
     pass
@@ -156,7 +185,7 @@ screen_manager = ScreenManager()
 screen_manager.add_widget(HomeScreen(name='home'))
 screen_manager.add_widget(EnterSymptoms(name='enter_symptoms'))
 screen_manager.add_widget(SymptomsList(name='symptoms_list'))
-screen_manager.add_widget(VitalSigns(name='biometric_data'))
+screen_manager.add_widget(VitalSigns(name='vital_signs'))
 
 class ScenarioApp(App):
     def build(self):
