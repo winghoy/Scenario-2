@@ -1,3 +1,4 @@
+from random import randint
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.lang import Builder
@@ -133,8 +134,8 @@ Builder.load_string('''
             id: symptoms_list_label
             text: ''
             color: (0,0,0, 1)
-            size: (500, 100)
-            font_size: 40
+            size: (500, 500)
+            font_size: 30
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         Button:
             text: 'Back'
@@ -147,6 +148,80 @@ Builder.load_string('''
 
 <VitalSigns>:
     FloatLayout:
+        canvas:
+            Color:
+                rgba: 1, 1, 1, 1
+            Rectangle:
+                pos: 25, 750
+                size: 550, 100
+            Rectangle:
+                pos: 25, 550
+                size: 550, 100
+            Rectangle:
+                pos: 25, 350
+                size: 550, 100
+            Rectangle:
+                pos: 25, 150
+                size: 550, 100
+        Label:
+            text: 'Vital Signs:'
+            color: (0, 0, 0, 1)
+            size: (500, 100)
+            font_size: 40
+            bold: True
+            pos_hint: {'left': 1, 'center_y': 0.95}
+        Label:
+            text: 'Body Temperature'
+            color: (0, 0, 0, 1)
+            size: (500, 100)
+            font_size: 30
+            pos_hint: {'center_x': 0.5, 'center_y': 0.88}
+        Label:
+            id: body_temperature
+            text: ''
+            color: (0, 0, 0, 1)
+            size: (500, 100)
+            font_size: 30
+            pos_hint: {'center_x': 0.5, 'center_y': 0.8}
+        Label:
+            text: 'Pulse Rate'
+            color: (0, 0, 0, 1)
+            size: (500, 100)
+            font_size: 30
+            pos_hint: {'center_x': 0.5, 'center_y': 0.68}
+        Label:
+            id: pulse_rate
+            text: ''
+            color: (0, 0, 0, 1)
+            size: (500, 100)
+            font_size: 30
+            pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+        Label:
+            text: 'Respiration Rate'
+            color: (0, 0, 0, 1)
+            size: (500, 100)
+            font_size: 30
+            pos_hint: {'center_x': 0.5, 'center_y': 0.48}
+        Label:
+            id: respiration_rate
+            text: ''
+            color: (0, 0, 0, 1)
+            size: (500, 100)
+            font_size: 30
+            pos_hint: {'center_x': 0.5, 'center_y': 0.4}
+        Label:
+            text: 'Blood Pressure'
+            color: (0, 0, 0, 1)
+            size: (500, 100)
+            font_size: 30
+            pos_hint: {'center_x': 0.5, 'center_y': 0.28}
+        Label:
+            id: blood_pressure
+            text: ''
+            color: (0, 0, 0, 1)
+            size: (500, 100)
+            font_size: 30
+            pos_hint: {'center_x': 0.5, 'center_y': 0.2}
         Button:
             text: 'Back'
             size_hint: (0.25, 0.1)
@@ -167,7 +242,7 @@ class EnterSymptoms(Screen):
         self.ids.date.text = ''
         self.ids.symptoms.text = ''
         with open('patient.txt', 'a') as file:
-            file.write(f'Date: {date}\nSymptoms: {symptoms}\n\n')
+            file.write(f'Date: {date}\nSymptoms: {symptoms}\n')
 
 class SymptomsList(Screen):
     def on_enter(self):
@@ -177,6 +252,8 @@ class SymptomsList(Screen):
             for line in data:
                 if line.startswith('Date:') or line.startswith('Symptoms:'):
                     filtered_data.append(line.split(':')[1].strip())
+                    if line.startswith('Symptoms:'):
+                        filtered_data.append('\n')  # Add a new line after every Symptoms line
             text = '\n'.join(filtered_data)
         self.ids.symptoms_list_label.text = str(text)
 
@@ -184,7 +261,15 @@ class SymptomsList(Screen):
         self.ids.symptoms_list_label.text = ''
 
 class VitalSigns(Screen):
-    pass
+    def on_enter(self):
+        body_temperature = randint(97, 99)
+        pulse_rate = randint(60, 100)
+        respiration_rate = randint(12, 20)
+        blood_pressure = randint(90, 120)
+        self.ids.body_temperature.text = f'{body_temperature} ˚C'
+        self.ids.pulse_rate.text = f'{pulse_rate} bpm'
+        self.ids.respiration_rate.text = f'{respiration_rate} bpm'
+        self.ids.blood_pressure.text = f'{blood_pressure} mmHg'
 
 screen_manager = ScreenManager()
 screen_manager.add_widget(HomeScreen(name='home'))
