@@ -3,14 +3,6 @@ from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 
-import json
-from fhir.resources.patient import Patient
-from fhir.resources.humanname import HumanName
-from fhir.resources.observation import Observation
-from fhir.resources.codeableconcept import CodeableConcept
-from fhir.resources.coding import Coding
-# from fhir.resources.fhirdate import FHIRDate
-
 Builder.load_string('''
 <HomeScreen>:
     BoxLayout:
@@ -124,12 +116,25 @@ Builder.load_string('''
     on_enter:
         root.on_enter()
     FloatLayout:
+        canvas:
+            Color:
+                rgba: 1, 1, 1, 1
+            Rectangle:
+                pos: 25, 160
+                size: 550, 750
+        Label:
+            text: 'List of Symptoms:'
+            color: (0, 0, 0, 1)
+            size: (500, 100)
+            font_size: 40
+            bold: True
+            pos_hint: {'left': 1, 'center_y': 0.95}
         Label:
             id: symptoms_list_label
             text: ''
-            color: (1, 1, 1, 1)
+            color: (0,0,0, 1)
             size: (500, 100)
-            font_size: 20
+            font_size: 40
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         Button:
             text: 'Back'
