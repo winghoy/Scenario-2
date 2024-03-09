@@ -124,7 +124,7 @@ Builder.load_string('''
                 root.manager.transition.direction = 'right'
                 root.manager.current = 'home'
 
-<BiometricData>:
+<VitalSigns>:
     FloatLayout:
         Button:
             text: 'Back'
@@ -149,14 +149,14 @@ class EnterSymptoms(Screen):
 class SymptomsList(Screen):
     pass
 
-class BiometricData(Screen):
+class VitalSigns(Screen):
     pass
 
 screen_manager = ScreenManager()
 screen_manager.add_widget(HomeScreen(name='home'))
 screen_manager.add_widget(EnterSymptoms(name='enter_symptoms'))
 screen_manager.add_widget(SymptomsList(name='symptoms_list'))
-screen_manager.add_widget(BiometricData(name='biometric_data'))
+screen_manager.add_widget(VitalSigns(name='biometric_data'))
 
 class ScenarioApp(App):
     def build(self):
