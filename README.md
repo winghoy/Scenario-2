@@ -13,7 +13,7 @@ pip install kivy
 
 ## Microsoft Power App
 
-Microsoft Power App was used to show what our concept **UI** for the app. Open the file `appUI.msapp` from the repo through the Power Apps website.
+Microsoft Power App was used to show our concept **UI** for the app. Open the file `appUI.msapp` from the repo through the Power Apps website.
 
 [*Open Power App File*](https://make.powerapps.com/e/Default-1faf88fe-a998-4c5b-93c9-210a11d9a5c2/canvas/?action=new-data&connector-type=showallapis&solution-id=00000001-0000-0000-0001-00000000009b)
 
