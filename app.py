@@ -262,7 +262,7 @@ class SymptomsList(Screen):
 
 class VitalSigns(Screen):
     def on_enter(self):
-        body_temperature = randint(97, 99)
+        body_temperature = randint(36, 38)
         pulse_rate = randint(60, 100)
         respiration_rate = randint(12, 20)
         blood_pressure = randint(90, 120)
